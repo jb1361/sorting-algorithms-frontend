@@ -123,5 +123,10 @@
       }
     }
   },
-  "defaultProject": "sorting-algorithms-frontend"
+  "defaultProject": "sorting-algorithms-frontend",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }
