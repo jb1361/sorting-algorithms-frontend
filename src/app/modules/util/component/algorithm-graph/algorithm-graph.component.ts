@@ -26,7 +26,21 @@ export class AlgorithmGraphComponent implements OnInit {
       dataPointMaxWidth: 20,
       width: (this.size * 20),
       axisX: {
-        interval: 1
+        interval: 1,
+        gridThickness: 0,
+        tickLength: 0,
+        lineThickness: 0,
+        labelFormatter: function() {
+          return '';
+        }
+      },
+      axisY: {
+        gridThickness: 0,
+        tickLength: 0,
+        lineThickness: 0,
+        labelFormatter: function() {
+          return '';
+        }
       },
       title: {
         text: this.algorithm,
