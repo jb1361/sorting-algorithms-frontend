@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {MaterialModule} from '../material/material.module';
-import {HeaderComponent} from './component/header/header.component';
 import { NotFoundComponent } from './component/not-found/not-found.component';
 
 @NgModule({
@@ -9,7 +8,7 @@ import { NotFoundComponent } from './component/not-found/not-found.component';
     CommonModule,
     MaterialModule
   ],
-  declarations: [HeaderComponent, NotFoundComponent],
-  exports: [HeaderComponent]
+  declarations: [NotFoundComponent],
+  exports: []
 })
 export class UtilModule { }

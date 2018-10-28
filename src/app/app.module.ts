@@ -6,6 +6,7 @@ import {ROUTES} from './app.routes';
 import {UtilModule} from './modules/util/util.module';
 import {PagesModule} from './modules/pages/pages.module';
 import {MaterialModule} from './modules/material/material.module';
+import {LayoutModule} from './modules/layout/layout.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import {MaterialModule} from './modules/material/material.module';
     RouterModule.forRoot(ROUTES),
     PagesModule,
     UtilModule,
-    MaterialModule
+    MaterialModule,
+    LayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]
