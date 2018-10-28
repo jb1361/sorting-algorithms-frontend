@@ -1,67 +1,47 @@
 import {Component, Input, OnInit} from '@angular/core';
-import CanvasJS from '../../../../../assets/canvasjs.min';
+import {merge} from 'rxjs';
+
 @Component({
   selector: 'app-algorithm-graph',
   templateUrl: './algorithm-graph.component.html',
   styleUrls: ['./algorithm-graph.component.scss']
 })
 export class AlgorithmGraphComponent implements OnInit {
-  @Input() data: {};
+  @Input() data: number[];
   @Input() algorithm: string;
   @Input() size: number;
+  @Input() executionDelay: number;
+  chart: any;
   constructor() { }
 
   ngOnInit() {
     if (!this.data) {
-      this.initializeData(this.size ? this.size : 25);
+      this.initializeData(this.size ? this.size : 100);
     }
-    CanvasJS.addColorSet('blue', ['#0000b2']);
-    const chart = new CanvasJS.Chart('chartContainer', {
-      animationEnabled: true,
-      exportEnabled: false,
-      interactivityEnabled: false,
-      zoomEnabled: false,
-      panEnabled: false,
-      colorSet: 'blue',
-      dataPointMaxWidth: 20,
-      width: (this.size * 20),
-      axisX: {
-        interval: 1,
-        gridThickness: 0,
-        tickLength: 0,
-        lineThickness: 0,
-        labelFormatter: function() {
-          return '';
-        }
-      },
-      axisY: {
-        gridThickness: 0,
-        tickLength: 0,
-        lineThickness: 0,
-        labelFormatter: function() {
-          return '';
-        }
-      },
-      title: {
-        text: this.algorithm,
-      },
-      data: [{
-        type: 'column',
-        dataPoints: this.data
-      }]
-    });
+    if (!this.executionDelay) {
+      this.executionDelay = 500;
+    }
+   // this.chart.render();
 
-    chart.render();
-  }
-  public runAlgorithm() {
+    this.runAlgorithm('mergesort');
+    }
+  public runAlgorithm(algorithm: string) {
+    switch (algorithm) {
+      case 'bubblesort':
+          this.bubbleSort(this.data);
+        break;
+      case 'mergesort':
+        this.mergeSort(this.data);
+        break;
+      default: return;
+    }
   }
   public  initializeData(size: number) {
     const data = [];
     for (let i = 1; i <= size; i++) {
-      data.push({x: i, y: i});
+      data.push(i);
     }
     this.size = size;
-    // this.data = data;
     this.data = this.shuffle(data);
   }
  public shuffle(array) {
@@ -69,12 +49,56 @@ export class AlgorithmGraphComponent implements OnInit {
      const randomIndex = Math.floor(Math.random() * (i + 1));
      const itemAtIndex = array[randomIndex];
      array[randomIndex] = array[i];
-     array[randomIndex]['x'] = array[i]['x'];
      array[i] = itemAtIndex;
-     array[i]['x'] = i;
    }
     return array;
   }
 
-
+  public bubbleSort(array: number[]) {
+      for (let i = 0; i < array.length; i++) {
+          for (let j = 0; j < array.length; j++) {
+            setTimeout(() => {
+            if (array[i] < array[j]) {
+              const temp = array[i];
+              array[i] = array[j];
+              array[j] = temp;
+            }
+            this.data = array;
+          }, this.executionDelay);
+        }
+      }
+  }
+  public mergeSort(array: number[]) {
+    const len = array.length;
+    if (len < 2) {
+      return array;
+    }
+    const mid = Math.floor(len / 2),
+      left = array.slice(0, mid),
+      right = array.slice(mid);
+    // send left and right to the mergeSort to broke it down into pieces
+    // then merge those
+    setTimeout(() => {
+      return this.merge(this.mergeSort(left), this.mergeSort(right));
+    }, this.executionDelay);
+  }
+  public merge(left: number[], right: number[]) {
+    const result = [];
+    const lLen = left.length;
+    const rLen = right.length;
+    console.log(left);
+    let r = 0;
+    let l = 0;
+    while (l < lLen && r < rLen) {
+      if (left[l] < right[r]) {
+        result.push(left[l++]);
+      } else {
+        result.push(right[r++]);
+      }
+    }
+    this.data = result;
+    // remaining part needs to be addred to the result
+    return result.concat(left.slice(l)).concat(right.slice(r));
+  }
 }
+
