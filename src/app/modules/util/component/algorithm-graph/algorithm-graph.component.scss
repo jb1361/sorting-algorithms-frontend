@@ -3,12 +3,23 @@
   background-color: #0000b2;
   margin-right: 1px;
 }
+.columns {
+  display: flex;
+  width: inherit;
+}
 .chart-container {
-  height: 500px;
+  height: 520px;
   width: 500px;
 }
 .chart {
-  height: 500px;
-  width: 500px;
+  height: inherit;
+  width: inherit;
   display: flex;
+}
+
+.pointer {
+  display: flex;
+  height: 16.5px;
+  margin-top: 500px;
+  position: absolute;
 }

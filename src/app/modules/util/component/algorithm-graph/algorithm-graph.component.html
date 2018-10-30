@@ -1,8 +1,10 @@
-<!--<div class="chart-container" id="chartContainer" [style.width] = "size * 20 + 'px'" [style.height]="data.length * 20 + 'px'">-->
 <div class="chart-container" id="chartContainer">
   <div class="chart">
-  <!--<div class="chart" [style.width] = "size * 20 + 'px'" [style.height]="data.length * 20 + 'px'">-->
-    <div class="column" *ngFor="let column of data" [style.height]="((column)/size) * 500 + 'px'"[style.margin-top]="500 - ((column)/size) * 500  + 'px'"></div>
+    <div class="columns">
+      <div class="column" *ngFor="let column of data let j = index" [style.height]="((column)/size) * 500 + 'px'"[style.margin-top]="500 - ((column)/size) * 500  + 'px'"></div>
+      <img src="../../../../../assets/red-triangle.jpg" class="pointer" [style.margin-left]="20 * algorithmIndex + 'px'">
+
+    </div>
   </div>
 </div>
 

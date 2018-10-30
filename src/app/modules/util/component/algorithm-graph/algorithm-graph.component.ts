@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {merge} from 'rxjs';
 
 @Component({
   selector: 'app-algorithm-graph',
@@ -11,19 +10,19 @@ export class AlgorithmGraphComponent implements OnInit {
   @Input() algorithm: string;
   @Input() size: number;
   @Input() executionDelay: number;
-  chart: any;
+  algorithmIndex: number;
   constructor() { }
 
   ngOnInit() {
     if (!this.data) {
-      this.initializeData(this.size ? this.size : 100);
+      this.initializeData(this.size ? this.size : 25);
     }
     if (!this.executionDelay) {
-      this.executionDelay = 500;
+      this.executionDelay = 200;
     }
    // this.chart.render();
 
-    this.runAlgorithm('mergesort');
+    this.runAlgorithm('bubblesort');
     }
   public runAlgorithm(algorithm: string) {
     switch (algorithm) {
@@ -31,7 +30,7 @@ export class AlgorithmGraphComponent implements OnInit {
           this.bubbleSort(this.data);
         break;
       case 'mergesort':
-        this.mergeSort(this.data);
+        this.data = this.mergeSort(this.data);
         break;
       default: return;
     }
@@ -53,52 +52,59 @@ export class AlgorithmGraphComponent implements OnInit {
    }
     return array;
   }
-
   public bubbleSort(array: number[]) {
       for (let i = 0; i < array.length; i++) {
           for (let j = 0; j < array.length; j++) {
             setTimeout(() => {
-            if (array[i] < array[j]) {
-              const temp = array[i];
-              array[i] = array[j];
-              array[j] = temp;
-            }
-            this.data = array;
-          }, this.executionDelay);
+              if (array[i] < array[j]) {
+                  const temp = array[i];
+                  array[i] = array[j];
+                  array[j] = temp;
+              }
+              this.data = array;
+              this.algorithmIndex = i;
+            }, i * this.executionDelay);
         }
       }
   }
   public mergeSort(array: number[]) {
-    const len = array.length;
-    if (len < 2) {
+    if (array.length <= 1) {
       return array;
     }
-    const mid = Math.floor(len / 2),
-      left = array.slice(0, mid),
-      right = array.slice(mid);
-    // send left and right to the mergeSort to broke it down into pieces
-    // then merge those
-    setTimeout(() => {
+
+    const middle = Math.floor(array.length / 2);
+    const left = array.slice(0, middle);
+    const right = array.slice(middle);
+    // this.data = this.merge(this.mergeSort(left), this.mergeSort(right));
       return this.merge(this.mergeSort(left), this.mergeSort(right));
-    }, this.executionDelay);
   }
-  public merge(left: number[], right: number[]) {
-    const result = [];
-    const lLen = left.length;
-    const rLen = right.length;
-    console.log(left);
-    let r = 0;
-    let l = 0;
-    while (l < lLen && r < rLen) {
-      if (left[l] < right[r]) {
-        result.push(left[l++]);
-      } else {
-        result.push(right[r++]);
+
+  public merge(left: number[], right: number[]): number[] {
+    const array: number[] = [];
+    let lIndex = 0;
+    let rIndex = 0;
+
+    while (lIndex + rIndex < left.length + right.length) {
+      const lItem = left[lIndex];
+      const rItem = right[rIndex];
+
+      if (lItem == null) {
+        array.push(rItem);
+        rIndex++;
+      } else if (rItem == null) {
+        array.push(lItem);
+        lIndex++;
+      } else if (lItem < rItem) {
+        array.push(lItem);
+        lIndex++;
+      } else  {
+        array.push(rItem);
+        rIndex++;
       }
     }
-    this.data = result;
-    // remaining part needs to be addred to the result
-    return result.concat(left.slice(l)).concat(right.slice(r));
+   // setTimeout(() => {
+      return array;
+   // }, 500);
   }
 }
 
